@@ -1,3 +1,4 @@
+# Fire Emblem: Thracia 776 (FE5) - GBA Battle Forecast for Lil' Manster 1.08
 This is Zane Avernathy's GBA-style Fire Emblem Thracia 776 battle forecast, ported to Lil' Manster 1.08, with optional QoL Features.
 <img width="1881" height="1440" alt="image" src="https://github.com/user-attachments/assets/a0f97e86-f715-4f16-97d9-3bcfeaa4262a" />
 

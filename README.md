@@ -49,6 +49,10 @@ Miacis, Ultimage and the Lil' Manster / Project Exile teams: Lil' Manster
 
 Optiroc: SuperFamiconv
 
+https://github.com/Miacidae/Lil-Manster-Public
+
+https://github.com/ZaneAvernathy/FE5-GBABattleForecast
+
 64tass
 
 If you find bugs, let me know!

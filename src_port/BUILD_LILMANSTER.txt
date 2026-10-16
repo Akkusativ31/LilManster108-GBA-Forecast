@@ -1,0 +1,13 @@
+Building the Lil' Manster version
+
+1. Put a Lil' Manster 1.08 ROM in this folder as LM108.sfc
+   (CRC32 2039D71B).
+2. Put VoltEdge one folder up (../VoltEdge), at commit 357ae87.
+   Newer VoltEdge versions renamed some symbols this code uses.
+3. Run:
+     64tass -f -o out.sfc ForecastInstaller.asm -Wno-portable
+     python fix_checksum.py out.sfc
+4. Make the patch with any IPS tool (LM108.sfc -> out.sfc).
+
+The graphics files (.4bpp/.bin) are already converted, so
+SuperFamiconv is only needed if you change the PNGs.

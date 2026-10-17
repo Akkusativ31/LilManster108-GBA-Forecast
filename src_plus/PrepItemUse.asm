@@ -53,7 +53,8 @@ GUARD_LM_PREP_ITEM_USE :?= false
   LMPrepWaitStart  = $7EFFDE ; frame count when the wait began
   LMPrepWaitActive = $7EFFE0
   LMPrepMsgTime    = $7EFFE2 ; frame count when the use message appeared
-  LMPrepMsgDelay   = 90      ; frames before A/B can close it
+  LMPrepRingDelay   = 30     ; frames before A/B can close the message:
+  LMPrepManualDelay = 20     ; the jingle's length plus a little
   LMPrepMusic      = $2D     ; preparations theme ($888374 starts it)
   LMPrepPromoMax   = 16
 
@@ -485,8 +486,22 @@ GUARD_LM_PREP_ITEM_USE :?= false
         lda @l $0000DB
         sec
         sbc @l LMPrepMsgTime
-        cmp #LMPrepMsgDelay
+        pha
+        lda @l LMPrepMsgItem
+        and #$00FF
+        cmp #LMFirstManual
+        pla
+        bge +
+
+          cmp #LMPrepRingDelay
+          blt _MessageWait
+          bra ++
+
+        +
+        cmp #LMPrepManualDelay
         blt _MessageWait
+
+        +
 
         lda LMJoy1New
         bit #JOY_A | JOY_B

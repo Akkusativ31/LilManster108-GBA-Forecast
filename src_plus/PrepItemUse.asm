@@ -47,6 +47,8 @@ GUARD_LM_PREP_ITEM_USE :?= false
   LMPrepLockSearch = $7EFF7C ; scratch for the lock search
   LMPrepPromoCount = $7EFFA4 ; units waiting to promote on turn 1
   LMPrepPromos     = $7EFFA6 ; their deployment numbers (bytes)
+  LMPrepUsedOffset = $3D     ; PlayerProperties: bits 0-4 unused
+  LMPrepUsedBit    = $01
   LMPrepSavedMusic = $7EFFB8 ; chapter map music while the scenes play
   LMPrepMsgBuffer  = $7EFFBA ; menu text built for the use message (16 words)
   LMPrepMsgItem    = $7EFFDC ; item that was just used
@@ -1302,6 +1304,8 @@ GUARD_LM_PREP_ITEM_USE :?= false
       .autsiz
       .databank ?
 
+      jsr rsLMClearUsedMarks
+
       jsr rsLMPromotionsPending
       bcc _Original
 
@@ -1458,6 +1462,38 @@ GUARD_LM_PREP_ITEM_USE :?= false
       plp
       clc
       rtl
+
+      .databank 0
+
+    rsLMClearUsedMarks
+
+      .al
+      .xl
+      .autsiz
+      .databank ?
+
+      ; From turn 2 on, the "used an item in the preparations"
+      ; marks are cleared from all player units.
+
+      lda @l LMCurrentTurn
+      cmp #2
+      blt _Done
+
+      ldx #0
+
+      -
+        lda @l $7E5298 + LMPrepUsedOffset,x
+        and #~LMPrepUsedBit & $FFFF
+        sta @l $7E5298 + LMPrepUsedOffset,x
+        txa
+        clc
+        adc #$41
+        tax
+        cpx #48 * $41
+        blt -
+
+      _Done
+      rts
 
       .databank 0
 
@@ -1805,6 +1841,22 @@ GUARD_LM_PREP_ITEM_USE :?= false
         sta @l LMPrepPromoCount
 
       +
+
+      ; Also mark the unit itself (kept in saves, unlike the list):
+      ; in the buffer (it gets written back) and in its struct.
+
+      sep #$20
+      lda LMPrepSelectedUnit + LMPrepUsedOffset
+      ora #LMPrepUsedBit
+      sta LMPrepSelectedUnit + LMPrepUsedOffset
+      rep #$20
+      ldx LMPrepSelectedPointer
+      sep #$20
+      lda $7E0000 + LMPrepUsedOffset,x
+      ora #LMPrepUsedBit
+      sta $7E0000 + LMPrepUsedOffset,x
+      rep #$20
+
       lda LMPrepSelectedPointer
       jsr rsLMPrepFindLock
       bcs _Done
@@ -1834,9 +1886,17 @@ GUARD_LM_PREP_ITEM_USE :?= false
       .databank ?
 
       ; A: unit struct pointer. Carry set if it's in the list for
-      ; the current chapter.
+      ; the current chapter, or the unit is marked (after loading
+      ; a save made in the preparations).
 
       sta @l LMPrepLockSearch
+
+      phx
+      tax
+      lda @l $7E0000 + LMPrepUsedOffset,x
+      plx
+      and #LMPrepUsedBit
+      bne _Yes
 
       jsr rsLMPrepCurrentLockTag
       cmp @l LMPrepLockTag

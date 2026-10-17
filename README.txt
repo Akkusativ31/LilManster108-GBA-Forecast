@@ -31,7 +31,7 @@ LilManster108_GBAForecast_Plus.ips
   A unit that used something stays deployed for that chapter,
   and on turn 1 it can move, trade and wait but not attack
   (like having used the item on the map that turn).
-  Patched ROM: CRC32 751FC11E
+  Patched ROM: CRC32 9788461B
 
 Existing saves work with both.
 

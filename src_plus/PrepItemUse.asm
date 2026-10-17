@@ -52,6 +52,8 @@ GUARD_LM_PREP_ITEM_USE :?= false
   LMPrepMsgItem    = $7EFFDC ; item that was just used
   LMPrepWaitStart  = $7EFFDE ; frame count when the wait began
   LMPrepWaitActive = $7EFFE0
+  LMPrepMsgTime    = $7EFFE2 ; frame count when the use message appeared
+  LMPrepMsgDelay   = 90      ; frames before A/B can close it
   LMPrepMusic      = $2D     ; preparations theme ($888374 starts it)
   LMPrepPromoMax   = 16
 
@@ -478,6 +480,14 @@ GUARD_LM_PREP_ITEM_USE :?= false
         ; compact the inventory, write the unit back, redraw and
         ; fix the cursor.
 
+        ; Not before the jingle had its moment.
+
+        lda @l $0000DB
+        sec
+        sbc @l LMPrepMsgTime
+        cmp #LMPrepMsgDelay
+        blt _MessageWait
+
         lda LMJoy1New
         bit #JOY_A | JOY_B
         beq _MessageWait
@@ -667,6 +677,9 @@ GUARD_LM_PREP_ITEM_USE :?= false
           jsl rlLMDrawMenuText
 
           jsl rlLMEnableBG3Sync
+
+          lda @l $0000DB
+          sta @l LMPrepMsgTime
 
           lda #4
           sta @l LMPrepUseMode

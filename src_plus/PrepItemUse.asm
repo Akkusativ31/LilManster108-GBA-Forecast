@@ -1271,6 +1271,16 @@ GUARD_LM_PREP_ITEM_USE :?= false
           lda #>`aLMPromotionEventDefinitions
           sta lR18+size(byte)
           jsl rlLMRunEventDefinitions
+          bcc +
+
+            ; Like the game's own turn events: with this bit set,
+            ; Start doesn't skip the event (which would also cut
+            ; the promotion music off).
+            lda @l LMEventEngineStatus
+            ora #$2000
+            sta @l LMEventEngineStatus
+
+          +
 
         _Wait
         jml LMRtsInBank83
@@ -1316,6 +1326,16 @@ GUARD_LM_PREP_ITEM_USE :?= false
           lda #>`aLMPromotionEventDefinitions
           sta lR18+size(byte)
           jsl rlLMRunEventDefinitions
+          bcc +
+
+            ; Like the game's own turn events: with this bit set,
+            ; Start doesn't skip the event (which would also cut
+            ; the promotion music off).
+            lda @l LMEventEngineStatus
+            ora #$2000
+            sta @l LMEventEngineStatus
+
+          +
 
         _Wait
         jml LMRtsInBank83

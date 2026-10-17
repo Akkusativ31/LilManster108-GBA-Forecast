@@ -29,7 +29,7 @@ LilManster108_GBAForecast_Plus.ips
   so saving in the preparations keeps it. Picking the seal
   again before you leave lets you cancel it.
   A unit that used something stays deployed for that chapter.
-  Patched ROM: CRC32 11A9FAB1
+  Patched ROM: CRC32 8A893329
 
 Existing saves work with both.
 

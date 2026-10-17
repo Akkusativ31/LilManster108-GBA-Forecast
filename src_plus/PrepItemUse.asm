@@ -39,23 +39,26 @@ GUARD_LM_PREP_ITEM_USE :?= false
   ; Our own variables, in WRAM that's free in every scene we checked
   ; (title, map, battles, menus, preps). Reset clears it.
 
-  LMPrepUseMode   = $7EFF7E ; 1 while our three-choice prompt is up
-  LMPrepLockTag   = $7EFF80 ; $4C00 | chapter the lock list belongs to
-  LMPrepLockCount = $7EFF82
-  LMPrepLocks     = $7EFF84 ; up to 16 unit struct pointers
+  ; $7EF800-$7EFFFF is used by the hold-L fast enemy phase, so
+  ; everything that has to survive a turn lives in $7F5000+.
 
-  LMPrepLockSearch = $7EFF7C ; scratch for the lock search
-  LMPrepPromoCount = $7EFFA4 ; units waiting to promote on turn 1
-  LMPrepPromos     = $7EFFA6 ; their deployment numbers (bytes)
+  LMPrepUseMode   = $7F5002 ; 1 while our three-choice prompt is up
+  LMPrepLockTag   = $7F5004 ; $4C00 | chapter the lock list belongs to
+  LMPrepLockCount = $7F5006
+  LMPrepLocks     = $7F5008 ; up to 16 unit struct pointers
+
+  LMPrepLockSearch = $7F5000 ; scratch for the lock search
+  LMPrepPromoCount = $7F5028 ; units waiting to promote on turn 1
+  LMPrepPromos     = $7F502A ; their deployment numbers (bytes)
   LMPrepUsedOffset = $3D     ; PlayerProperties: bits 0-4 unused
   LMPrepUsedMask   = $03     ; bits 0-1: items used (max 3) = turns without attacking
-  LMPrepPenalty    = $7EFE00  ; per unit index (48): turns, copied at turn 1
-  LMPrepPenaltyTag = $7EFE30  ; $4C00 | chapter the table belongs to
-  LMPrepSavedMusic = $7EFFB8 ; chapter map music while the scenes play
+  LMPrepPenalty    = $7F5040  ; per unit index (48): turns, copied at turn 1
+  LMPrepPenaltyTag = $7F5070  ; $4C00 | chapter the table belongs to
+  LMPrepSavedMusic = $7F503C ; chapter map music while the scenes play
   LMPrepMsgBuffer  = $7EFFBA ; menu text built for the use message (16 words)
   LMPrepMsgItem    = $7EFFDC ; item that was just used
-  LMPrepWaitStart  = $7EFFDE ; frame count when the wait began
-  LMPrepWaitActive = $7EFFE0
+  LMPrepWaitStart  = $7F5072 ; frame count when the wait began
+  LMPrepWaitActive = $7F5074
   LMPrepMsgTime    = $7EFFE2 ; frame count when the use message appeared
   LMPrepRingDelay   = 30     ; frames before A/B can close the message:
   LMPrepManualDelay = 20     ; the jingle's length plus a little

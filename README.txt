@@ -32,7 +32,7 @@ LilManster108_GBAForecast_Plus.ips
   and for one turn per item used (up to 3) it can move,
   trade and wait but not attack, rescue, talk or visit (like having used
   the item on the map).
-  Patched ROM: CRC32 226FCB04
+  Patched ROM: CRC32 7C76E1D9
 
 Existing saves work with both.
 

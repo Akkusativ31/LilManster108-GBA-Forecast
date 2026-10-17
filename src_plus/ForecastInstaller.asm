@@ -2507,6 +2507,10 @@ GUARD_GBA_FORECAST :?= false
 
     .include "OptionsMenu.asm"
 
+  ; Lil' Manster: use rings in the preparations Items menu
+
+    .include "PrepItemUse.asm"
+
   ; Standalone installer
 
     .if (USE_GBA_FORECAST_FREESPACE)

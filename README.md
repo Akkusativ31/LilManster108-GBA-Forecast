@@ -36,7 +36,17 @@ Unit Level: shows the level in the units window (On / Off)
 <img width="1881" height="1440" alt="image" src="https://github.com/user-attachments/assets/3dd35d05-07db-4ef4-91bd-dd51def38b7e" />
 
 
-None of this changes gameplay. Old saves work.
+None of these options change gameplay. Old saves work.
+
+Plus also lets you use some items in the preparations Items menu, because it always bugged me that you can't. "Discard" is now called "Use":
+
+Rings and skill manuals work the same as on the map, with the same sound and a short message ("Strength +3", "Vantage learned")
+
+The Master Seal plays the normal promotion scene once when you leave the Items screen, so if you save in the preparations you don't have to watch it again when you retry
+
+Only deployed units can use items, and a unit that used one stays deployed for that chapter
+
+Everything else (keys, vulneraries, scrolls...) can't be used there, you can still discard it like before
 
 How to use: apply the patch to a Lil' Manster 1.08 ROM (CRC32 2039D71B), not the original Japanese ROM.
 

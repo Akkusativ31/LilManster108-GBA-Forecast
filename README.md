@@ -48,7 +48,7 @@ Only deployed units can use items, and a unit that used one stays deployed for t
 
 Everything else (keys, vulneraries, scrolls...) can't be used there, you can still discard it like before
 
-<sub>Known issue: on some setups pressing Start during the prep promotion scene can mute the music until you leave the preparations. Just don't press Start there for now.</sub>
+<sub>Known issue: on some setups pressing Start during the prep promotion scene can mute the music. Just don't press Start there for now.</sub>
 
 How to use: apply the patch to a Lil' Manster 1.08 ROM (CRC32 2039D71B), not the original Japanese ROM.
 

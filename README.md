@@ -44,7 +44,7 @@ Rings and skill manuals work the same as on the map, with the same sound and a s
 
 The Master Seal plays the normal promotion scene once when you leave the Items screen, so if you save in the preparations you don't have to watch it again when you retry
 
-Only deployed units can use items, and a unit that used one stays deployed for that chapter. On turn 1 it can move, trade and wait but not attack, like it used the item on the map that turn
+Only deployed units can use items, and a unit that used one stays deployed for that chapter. For one turn per item used (up to 3) it can move, trade and wait but not attack or rescue, like it used the item on the map
 
 Everything else (keys, vulneraries, scrolls...) can't be used there, you can still discard it like before
 

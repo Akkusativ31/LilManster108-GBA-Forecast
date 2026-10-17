@@ -48,7 +48,9 @@ GUARD_LM_PREP_ITEM_USE :?= false
   LMPrepPromoCount = $7EFFA4 ; units waiting to promote on turn 1
   LMPrepPromos     = $7EFFA6 ; their deployment numbers (bytes)
   LMPrepUsedOffset = $3D     ; PlayerProperties: bits 0-4 unused
-  LMPrepUsedBit    = $01
+  LMPrepUsedMask   = $03     ; bits 0-1: items used (max 3) = turns without attacking
+  LMPrepPenalty    = $7EFE00  ; per unit index (48): turns, copied at turn 1
+  LMPrepPenaltyTag = $7EFE30  ; $4C00 | chapter the table belongs to
   LMPrepSavedMusic = $7EFFB8 ; chapter map music while the scenes play
   LMPrepMsgBuffer  = $7EFFBA ; menu text built for the use message (16 words)
   LMPrepMsgItem    = $7EFFDC ; item that was just used
@@ -203,7 +205,7 @@ GUARD_LM_PREP_ITEM_USE :?= false
 
   LMRestrictedCommands := [($3E9C0, $38056, $8786D8), ($3E9DC, $38070, $879B37)]
   LMRestrictedCommands ..= [($3E9FA, $382C4, $8799B7), ($3EB12, $3823C, $8793AB)]
-  LMRestrictedCommands ..= [($3EB4A, $3808C, $87A31E)]
+  LMRestrictedCommands ..= [($3EB4A, $3808C, $87A31E), ($3EB82, $3828C, $87988E)]
 
   .for _Index in range(len(LMRestrictedCommands))
     * := LMRestrictedCommands[_Index][0]
@@ -765,6 +767,10 @@ GUARD_LM_PREP_ITEM_USE :?= false
             jsr rsLMPrepSelectedSlot
             jsr rsLMPrepRemovePromo
 
+            ; The seal isn't used after all: take its turn back.
+            lda #$FFFF
+            jsr rsLMPrepAddUsed
+
             lda #$000D
             jsl rlLMPlaySound
 
@@ -1304,6 +1310,7 @@ GUARD_LM_PREP_ITEM_USE :?= false
       .autsiz
       .databank ?
 
+      jsr rsLMCopyPenalties
       jsr rsLMClearUsedMarks
 
       jsr rsLMPromotionsPending
@@ -1436,17 +1443,22 @@ GUARD_LM_PREP_ITEM_USE :?= false
       pha
       phx
 
-      lda @l LMCurrentTurn
-      cmp #1
-      bne _No
+      ; Restricted while turn <= items used in the preparations.
 
       lda @l LMCurrentPhase
       and #$00FF
       bne _No
 
-      lda @l LMPrepSelectedPointer
-      jsr rsLMPrepFindLock
+      jsr rsLMPrepCurrentLockTag
+      cmp @l LMPrepPenaltyTag
+      bne _No
+
+      jsr rsLMSelectedUnitIndex
       bcc _No
+      lda @l LMPrepPenalty,x
+      and #$00FF
+      cmp @l LMCurrentTurn
+      blt _No
 
         plx
         pla
@@ -1462,6 +1474,130 @@ GUARD_LM_PREP_ITEM_USE :?= false
       plp
       clc
       rtl
+
+      .databank 0
+
+    rsLMPrepAddUsed
+
+      .al
+      .xl
+      .autsiz
+      .databank $7E
+
+      ; A: +1 or -1 to the selected unit's used-item count (0-3),
+      ; in the buffer and in its struct.
+
+      sta wR0
+      ldx #<>LMPrepSelectedUnit
+      jsr _One
+      ldx LMPrepSelectedPointer
+      jsr _One
+      rts
+
+      _One
+      lda $7E0000 + LMPrepUsedOffset,x
+      and #LMPrepUsedMask
+      clc
+      adc wR0
+      bmi _Skip
+      cmp #LMPrepUsedMask + 1
+      bge _Skip
+      sta wR1
+      lda $7E0000 + LMPrepUsedOffset,x
+      and #~LMPrepUsedMask & $FFFF
+      ora wR1
+      sta $7E0000 + LMPrepUsedOffset,x
+      _Skip
+      rts
+
+      .databank 0
+
+    rsLMSelectedUnitIndex
+
+      .al
+      .xl
+      .autsiz
+      .databank ?
+
+      ; X = unit index of the selected unit (player units only),
+      ; carry clear if it isn't one.
+
+      lda @l LMPrepSelectedPointer
+      sec
+      sbc #$5298
+      bcc _Not
+      ldx #0
+
+      -
+        cmp #$41
+        blt +
+        sbc #$41
+        inc x
+        bra -
+
+      +
+      cpx #48
+      bge _Not
+      sec
+      rts
+
+      _Not
+      clc
+      rts
+
+      .databank 0
+
+    rsLMCopyPenalties
+
+      .al
+      .xl
+      .autsiz
+      .databank ?
+
+      ; Player phase of turn 1: keep each unit's used-item count
+      ; for the turns to come (the enemy AI clears those bits).
+
+      lda @l LMCurrentTurn
+      cmp #1
+      bne _Done
+      lda @l LMCurrentPhase
+      and #$00FF
+      bne _Done
+
+      php
+      phb
+      sep #$20
+      lda #$7E
+      pha
+      plb
+      rep #$30
+      jsr rsLMPrepCurrentLockTag
+      sta @l LMPrepPenaltyTag
+      plb
+      plp
+
+      ldx #0
+      ldy #0
+
+      -
+        lda @l $7E5298 + LMPrepUsedOffset,x
+        and #LMPrepUsedMask
+        sep #$20
+        phx
+        tyx
+        sta @l LMPrepPenalty,x
+        plx
+        rep #$20
+        txa
+        clc
+        adc #$41
+        tax
+        iny
+        cpy #48
+        blt -
+
+      _Done
+      rts
 
       .databank 0
 
@@ -1483,7 +1619,7 @@ GUARD_LM_PREP_ITEM_USE :?= false
 
       -
         lda @l $7E5298 + LMPrepUsedOffset,x
-        and #~LMPrepUsedBit & $FFFF
+        and #~LMPrepUsedMask & $FFFF
         sta @l $7E5298 + LMPrepUsedOffset,x
         txa
         clc
@@ -1842,20 +1978,12 @@ GUARD_LM_PREP_ITEM_USE :?= false
 
       +
 
-      ; Also mark the unit itself (kept in saves, unlike the list):
-      ; in the buffer (it gets written back) and in its struct.
+      ; Also count the item on the unit itself (kept in saves,
+      ; unlike the list): in the buffer (it gets written back) and
+      ; in its struct. Each item is one turn without attacking.
 
-      sep #$20
-      lda LMPrepSelectedUnit + LMPrepUsedOffset
-      ora #LMPrepUsedBit
-      sta LMPrepSelectedUnit + LMPrepUsedOffset
-      rep #$20
-      ldx LMPrepSelectedPointer
-      sep #$20
-      lda $7E0000 + LMPrepUsedOffset,x
-      ora #LMPrepUsedBit
-      sta $7E0000 + LMPrepUsedOffset,x
-      rep #$20
+      lda #1
+      jsr rsLMPrepAddUsed
 
       lda LMPrepSelectedPointer
       jsr rsLMPrepFindLock
@@ -1895,7 +2023,7 @@ GUARD_LM_PREP_ITEM_USE :?= false
       tax
       lda @l $7E0000 + LMPrepUsedOffset,x
       plx
-      and #LMPrepUsedBit
+      and #LMPrepUsedMask
       bne _Yes
 
       jsr rsLMPrepCurrentLockTag

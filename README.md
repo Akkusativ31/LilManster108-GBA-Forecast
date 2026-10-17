@@ -48,8 +48,6 @@ Only deployed units can use items, and a unit that used one stays deployed for t
 
 Everything else (keys, vulneraries, scrolls...) can't be used there, you can still discard it like before
 
-<sub>Known issue: on some setups the preparations music can stay quiet after the prep promotion scene. Pressing a button during the scene avoids it.</sub>
-
 How to use: apply the patch to a Lil' Manster 1.08 ROM (CRC32 2039D71B), not the original Japanese ROM.
 
 Download: https://github.com/Akkusativ31/LilManster108-GBA-Forecast/releases/latest

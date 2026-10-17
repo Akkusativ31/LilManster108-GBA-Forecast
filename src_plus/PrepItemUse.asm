@@ -1308,6 +1308,7 @@ GUARD_LM_PREP_ITEM_USE :?= false
           ; The scene ends by clearing the map music: keep it.
 
           lda @l $7E0E2D
+          ora #$8000 ; never 0, even if no map music is set yet
           sta @l LMPrepSavedMusic
 
           lda #<>aLMPromotionEventDefinitions
@@ -1587,6 +1588,7 @@ GUARD_LM_PREP_ITEM_USE :?= false
         bne _MusicKept ; no scene played (the seal was traded away)
 
           lda @l LMPrepSavedMusic
+          and #$7FFF
           sta @l $7E0E2D
           lda #LMPrepMusic
           sta @l $7E04BA

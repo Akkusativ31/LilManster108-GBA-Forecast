@@ -28,8 +28,10 @@ LilManster108_GBAForecast_Plus.ips
   preparations map, once. The unit is promoted right then,
   so saving in the preparations keeps it. Picking the seal
   again before you leave lets you cancel it.
-  A unit that used something stays deployed for that chapter.
-  Patched ROM: CRC32 65C0C0FE
+  A unit that used something stays deployed for that chapter,
+  and on turn 1 it can move, trade and wait but not attack
+  (like having used the item on the map that turn).
+  Patched ROM: CRC32 751FC11E
 
 Existing saves work with both.
 

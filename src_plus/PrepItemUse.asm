@@ -199,13 +199,14 @@ GUARD_LM_PREP_ITEM_USE :?= false
   ; Turn 1: a unit that used an item in the preparations has
   ; already "used an item" that turn, so like on the map it can
   ; still move, trade and wait, but not attack (or capture,
-  ; steal, dance or use a staff). Each command's usability check
+  ; steal, dance, use a staff, rescue, talk or visit). Each command's usability check
   ; is wrapped; Lil' Manster's command table is at $3E9xx, the
   ; vanilla one (unused) at $380xx.
 
   LMRestrictedCommands := [($3E9C0, $38056, $8786D8), ($3E9DC, $38070, $879B37)]
   LMRestrictedCommands ..= [($3E9FA, $382C4, $8799B7), ($3EB12, $3823C, $8793AB)]
   LMRestrictedCommands ..= [($3EB4A, $3808C, $87A31E), ($3EB82, $3828C, $87988E)]
+  LMRestrictedCommands ..= [($3E9A6, $380A4, $878557), ($3EA86, $38112, $87861F)] ; Talk, Visit
 
   .for _Index in range(len(LMRestrictedCommands))
     * := LMRestrictedCommands[_Index][0]

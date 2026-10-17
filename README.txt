@@ -30,9 +30,9 @@ LilManster108_GBAForecast_Plus.ips
   again before you leave lets you cancel it.
   A unit that used something stays deployed for that chapter,
   and for one turn per item used (up to 3) it can move,
-  trade and wait but not attack or rescue (like having used
+  trade and wait but not attack, rescue, talk or visit (like having used
   the item on the map).
-  Patched ROM: CRC32 1850228C
+  Patched ROM: CRC32 226FCB04
 
 Existing saves work with both.
 

@@ -24,7 +24,7 @@ GUARD_LM_OPTIONS_MENU :?= false
 .if (!GUARD_LM_OPTIONS_MENU)
   GUARD_LM_OPTIONS_MENU := true
 
-  LMOptionRows          = 15
+  LMOptionRows          = 16
   LMOldOptionPointers   = [$CEEC, $CF08, $CF24, $CF40, $CF58, $CF74, $CF8C, $CFAC, $CFC8, $CFE0, $CFF8, $D018]
 
   ; Getter/saver helpers and every pointer in an option entry are
@@ -39,6 +39,7 @@ GUARD_LM_OPTIONS_MENU :?= false
       .word <>aLMOptionForecast
       .word <>aLMOptionArrows
       .word <>aLMOptionLevel
+      .word <>aLMOptionPrep
       .word 0
 
     LMOptionEntry .macro Name, Choices, Subtext, Icon, Positions
@@ -60,6 +61,7 @@ GUARD_LM_OPTIONS_MENU :?= false
     aLMOptionForecast .LMOptionEntry aLMOptionNameForecast, aLMOptionChoicesForecast, aLMOptionSubForecast, $38A0, aLMOptionChoicesForecastPositions
     aLMOptionArrows   .LMOptionEntry aLMOptionNameArrows, aLMOptionChoicesArrows, aLMOptionSubArrows, $38A0, aLMOptionChoicesArrowsPositions
     aLMOptionLevel    .LMOptionEntry aLMOptionNameLevel, aLMOptionChoicesLevel, aLMOptionSubLevel, $38A4, aLMOptionChoicesLevelPositions
+    aLMOptionPrep     .LMOptionEntry aLMOptionNamePrep, aLMOptionChoicesPrep, aLMOptionSubPrep, $38A0, aLMOptionChoicesPrepPositions
 
     ; Getter: the menu calls this once per row when it opens.
     ; Copies the word to the working copy, clearing any setting
@@ -92,6 +94,15 @@ GUARD_LM_OPTIONS_MENU :?= false
       lda @l LM_OPTIONS_WORD
       and #LM_OPTION_LEVEL
       cmp #2 << 8
+      blt +
+        lda #0
+      +
+      ora @l LM_OPTIONS_TEMP
+      sta @l LM_OPTIONS_TEMP
+
+      lda @l LM_OPTIONS_WORD
+      and #LM_OPTION_PREP
+      cmp #3 << 12
       blt +
         lda #0
       +
@@ -139,6 +150,69 @@ GUARD_LM_OPTIONS_MENU :?= false
         .word $0160 + (_Row * $C0)
       .endfor
 
+    ; With 16 rows the window color settings reach the BG3 tilemap
+    ; rows the subtitle window used (60-63). The subtitle moves into
+    ; the top window's rows 1-2 instead: BG3 gets its own scroll HDMA
+    ; table that shows rows 0, 4, 4, 3 for the top window (an empty
+    ; frame) and rows 0-3 for the bottom one. BG2 keeps the old one.
+
+    LMOptionsBG3HDMA = $7EFFE4
+
+    aLMOptionsBG3HDMATemplate
+      .byte 8
+      .word 0
+      .byte 8
+      .word 24
+      .byte 8
+      .word 16
+      .byte 8
+      .word 0
+      .byte 80
+      .word 0
+      .byte 80
+      .word 0
+      .byte 32
+      .word 320
+      .byte 0
+    LMOptionsBG3HDMASize = * - aLMOptionsBG3HDMATemplate
+
+    rlLMOptionsHDMAInit
+
+      .al
+      .xl
+      .autsiz
+      .databank ?
+
+      jsl $80B340 ; copy the shared table (replaced call)
+
+      php
+      rep #$30
+      phx
+      ldx #LMOptionsBG3HDMASize - 2
+      -
+        lda @l aLMOptionsBG3HDMATemplate,x
+        sta @l LMOptionsBG3HDMA,x
+        dex
+        dex
+        bpl -
+      plx
+      plp
+      rtl
+
+    rlLMOptionsScrollUpdate
+
+      .al
+      .xl
+      .autsiz
+      .databank $7E
+
+      lda @l $7EA9C8
+      sta @l $7EA9BF
+      sta @l $7EA9C2
+      sta @l LMOptionsBG3HDMA + 13
+      sta @l LMOptionsBG3HDMA + 16
+      rtl
+
     .cerror * > $120000, "Options data overflows bank $11"
 
   .endlogical
@@ -179,7 +253,40 @@ GUARD_LM_OPTIONS_MENU :?= false
   ; more rows' worth of tilemap ($0840 -> $0B40).
 
   * := $02E2D8
-  .word $0840 + (3 * $C0)
+  .word $0840 + (4 * $C0)
+
+  ; Subtitle window moved to BG3 rows 0-3 (see rlLMOptionsHDMAInit).
+
+  * := $02D9EB
+  .long LMOptionsBG3HDMA      ; BG3VOFS HDMA table
+  * := $02D97E
+  jsl rlLMOptionsHDMAInit
+  * := $02CE9A
+  jsl rlLMOptionsScrollUpdate
+  nop
+  nop
+  nop
+  nop
+  nop
+  * := $02D850
+  .long $7EE77C               ; bottom window tilemap info: row 0
+  * := $02DC6C
+  .word $E77C + ((32 + 1) * 2) ; subtitle clear: row 1
+  * := $02DCB8
+  .long $7EE77C + (32 * 2)    ; subtitle DMA source: row 1
+  * := $02DCBE
+  .word $5000 + 32            ; subtitle DMA destination: row 1
+
+  ; The row pointer list ($7EA95F, 16 words) needs 17 words for 16
+  ; rows and its 0 end marker, but the row selections follow right
+  ; after it: move the list to $7EFFBA (free while the menu is up).
+
+  LMOptionPointersRAM = $FFBA
+
+  .for _Offset in [$02D518, $02D530, $02D638, $02DA25, $02DC63, $02E2C8, $48CE21, $48D445, $48D483]
+    * := _Offset + 1
+    .word LMOptionPointersRAM
+  .endfor
 
   ; "Restore" reloads the working copies from the save file.
   ; Vanilla put the (unused) autocursor word where rows 12-15

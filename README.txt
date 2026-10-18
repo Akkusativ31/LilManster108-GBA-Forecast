@@ -32,7 +32,13 @@ LilManster108_GBAForecast_Plus.ips
   and for one turn per item used (up to 3) it can move,
   trade and wait but not attack, rescue, talk or visit (like having used
   the item on the map).
-  Patched ROM: CRC32 7C76E1D9
+  Configuration > Prep Use:
+    On         - as above
+    Off        - items can't be used in the preparations
+                 (the button still says "Use", it just discards)
+    No Penalty - items can be used, no turn penalty and the
+                 unit can be taken out again
+  Patched ROM: CRC32 524F2312
 
 Existing saves work with both.
 

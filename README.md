@@ -48,6 +48,10 @@ Only deployed units can use items, and a unit that used one stays deployed for t
 
 Everything else (keys, vulneraries, scrolls...) can't be used there, you can still discard it like before
 
+Prep Use (Configuration menu): On / Off / No Penalty
+
+On is the normal rule above, Off turns item use in the preparations off (the button still says "Use" but it only discards), No Penalty lets you use items without the turn penalty and you can take the unit out again
+
 How to use: apply the patch to a Lil' Manster 1.08 ROM (CRC32 2039D71B), not the original Japanese ROM.
 
 Download: https://github.com/Akkusativ31/LilManster108-GBA-Forecast/releases/latest

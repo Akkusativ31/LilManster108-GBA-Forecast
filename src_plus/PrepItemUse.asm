@@ -418,6 +418,11 @@ GUARD_LM_PREP_ITEM_USE :?= false
       ; Carry set if the item under the discard cursor is a ring
       ; and its owner is deployed.
 
+      lda @l LM_OPTIONS_WORD
+      and #LM_OPTION_PREP
+      cmp #LM_PREP_OFF
+      beq _No
+
       lda LMPrepSelectedState
       bit #UnitStateMoved ; deployed, in preps
       beq _No
@@ -1449,6 +1454,11 @@ GUARD_LM_PREP_ITEM_USE :?= false
 
       ; Restricted while turn <= items used in the preparations.
 
+      lda @l LM_OPTIONS_WORD
+      and #LM_OPTION_PREP
+      cmp #LM_PREP_NO_PENALTY
+      beq _No
+
       lda @l LMCurrentPhase
       and #$00FF
       bne _No
@@ -2068,6 +2078,11 @@ GUARD_LM_PREP_ITEM_USE :?= false
 
       ; X: unit struct. A deployed unit that used an item in prep
       ; can't be taken out.
+
+      lda @l LM_OPTIONS_WORD
+      and #LM_OPTION_PREP
+      cmp #LM_PREP_NO_PENALTY
+      beq _Original
 
       lda @l $7E0000 + structCharacterDataRAM.UnitState,x
       bit #UnitStateMoved

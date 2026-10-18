@@ -32,3 +32,14 @@ aLMOptionChoicesLevel ; On / Off, (position, tiles) [(0, 1), (3, 2)], 5 tiles wi
   .word $0141, $2020, $2020, $0142, $0034, 0
 
 aLMOptionChoicesLevelPositions := [(0, 1), (3, 2)]
+
+aLMOptionNamePrep ; "Prep Use"
+  .word $014A, $01AC, $0014, $00B7, 0
+
+aLMOptionSubPrep ; "Use items in preparations, with or without penalty"
+  .word $013E, $0005, $0051, $013B, $0159, $0147, $0036, $00E6, $01AC, $000F, $0018, $004C, $004D, $01CF, $008F, $0051, $009A, $0008, $01B3, $01DE, $005A, $012A, $0028, $0112, $004F, $0193, $0009, 0
+
+aLMOptionChoicesPrep ; On / Off / No Penalty, [(0, 1), (3, 2), (7, 6)], 13 tiles wide
+  .word $0141, $2020, $2020, $0142, $0034, $2020, $2020, $001A, $0054, $011A, $0090, $00EC, $0072, 0
+
+aLMOptionChoicesPrepPositions := [(0, 1), (3, 2), (7, 6)]

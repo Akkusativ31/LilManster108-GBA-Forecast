@@ -61,8 +61,9 @@ GUARD_LM_OPTIONS_MENU :?= false
     aLMOptionForecast .LMOptionEntry aLMOptionNameForecast, aLMOptionChoicesForecast, aLMOptionSubForecast, $38A0, aLMOptionChoicesForecastPositions
     aLMOptionArrows   .LMOptionEntry aLMOptionNameArrows, aLMOptionChoicesArrows, aLMOptionSubArrows, $38A0, aLMOptionChoicesArrowsPositions
     aLMOptionLevel    .LMOptionEntry aLMOptionNameLevel, aLMOptionChoicesLevel, aLMOptionSubLevel, $38A4, aLMOptionChoicesLevelPositions
-    ; Lil' Manster's Game Speed row with a third choice, "Walk":
-    ; fast walking like Fast, but the phase banner still shows.
+    ; Lil' Manster's Game Speed row with three choices:
+    ; Normal, Fast (fast walking) and Faster (fast walking and
+    ; no phase banner, Lil' Manster's old Fast).
     ; Same name, getter, saver and icon as Lil' Manster's entry.
 
     aLMOptionGameSpeed
@@ -270,10 +271,10 @@ GUARD_LM_OPTIONS_MENU :?= false
   ; more rows' worth of tilemap ($0840 -> $0B40).
 
   ; Phase banner: Lil' Manster skips it when the speed nybble
-  ; is non-zero; skip it only for Fast (1), not for Walk (2).
+  ; is non-zero; skip it only for Faster (2), Fast (1) keeps it.
 
   * := $48DF5E
-  .word $0010
+  .word $0020
 
   * := $02E2D8
   .word $0840 + (4 * $C0)

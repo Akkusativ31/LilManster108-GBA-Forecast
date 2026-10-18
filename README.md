@@ -12,62 +12,52 @@ I tested for glitches and crashes, played one whole chapter and tested tons of s
 
 All the credit should go to ZaneAvernathy and Miacidae. If Zane or Miacidae does not like that their code is being used in an AI project, I would take it down on their request.
 
-There are two versions:
+## Versions
 
-GBA Forecast: just the forecast, ported over. Nothing else is changed.
-
-GBA Forecast Plus: the same forecast with some extras. You can turn each one on or off in the Configuration menu (after "Window Pattern"):
+- **GBA Forecast**: just the forecast, ported over. Nothing else is changed.
+- **GBA Forecast Plus**: the same forecast with some extras. You can turn each one on or off in the Configuration menu (after "Window Pattern").
 
 <img width="1881" height="1440" alt="image" src="https://github.com/user-attachments/assets/98e88906-2d0f-4881-857d-1b6e64562d9b" />
 
+## Plus options
 
-Battle Forecast: GBA / Still / Classic
-
-GBA has the floating x2/x4 like FE8, and the weapon icon flashes when it's effective
-
-Still is the same without the animations
-
-Classic is the normal Lil' Manster forecast
-
-Weapon Triangle: GBA arrows / Thracia arrows / Off
-
-Unit Level: shows the level in the units window (On / Off)
+- **Battle Forecast**: GBA / Still / Classic
+  - GBA has the floating x2/x4 like FE8, and the weapon icon flashes when it's effective
+  - Still is the same without the animations
+  - Classic is the normal Lil' Manster forecast
+- **Weapon Triangle**: GBA arrows / Thracia arrows / Off
+- **Unit Level**: shows the level in the units window (On / Off)
 
 <img width="1881" height="1440" alt="image" src="https://github.com/user-attachments/assets/3dd35d05-07db-4ef4-91bd-dd51def38b7e" />
 
-
 None of these options change gameplay. Old saves work.
 
-Plus also lets you use some items in the preparations Items menu, because it always bugged me that you can't. "Discard" is now called "Use":
+## Items in the preparations (Plus)
 
-Rings and skill manuals work the same as on the map, with the same sound and a short message ("Strength +3", "Vantage learned")
+Plus also lets you use some items in the preparations Items menu, because it always bugged me that you can't. "Discard" is now called "Use".
 
-The Master Seal plays the normal promotion scene once when you leave the Items screen, so if you save in the preparations you don't have to watch it again when you retry
+- Rings and skill manuals work the same as on the map, with the same sound and a short message ("Strength +3", "Vantage learned")
+- The Master Seal plays the normal promotion scene once when you leave the Items screen, so if you save in the preparations you don't have to watch it again when you retry
+- Only deployed units can use items, and a unit that used one stays deployed for that chapter
+- For one turn per item used (up to 3) that unit can move, trade and wait but not attack, rescue, talk or visit, like it used the item on the map
+- Everything else (keys, vulneraries, scrolls...) can't be used there, you can still discard it like before
+- **Prep Use** (Configuration menu): On / Off / No Penalty
+  - On: the rules above
+  - Off: no item use in the preparations (the button still says "Use" but it only discards)
+  - No Penalty: use items without the turn penalty, and you can take the unit out again
 
-Only deployed units can use items, and a unit that used one stays deployed for that chapter. For one turn per item used (up to 3) it can move, trade and wait but not attack, rescue, talk or visit, like it used the item on the map
+## How to use
 
-Everything else (keys, vulneraries, scrolls...) can't be used there, you can still discard it like before
+- Apply the patch to a Lil' Manster 1.08 ROM (CRC32 2039D71B), not the original Japanese ROM
+- Download: https://github.com/Akkusativ31/LilManster108-GBA-Forecast/releases/latest
 
-Prep Use (Configuration menu): On / Off / No Penalty
+## Credits
 
-On is the normal rule above, Off turns item use in the preparations off (the button still says "Use" but it only discards), No Penalty lets you use items without the turn penalty and you can take the unit out again
-
-How to use: apply the patch to a Lil' Manster 1.08 ROM (CRC32 2039D71B), not the original Japanese ROM.
-
-Download: https://github.com/Akkusativ31/LilManster108-GBA-Forecast/releases/latest
-
-Credits: 
-
-Zane Avernathy: GBA forecast, VoltEdge, FE5 disassembly
-
-Miacis, Ultimage and the Lil' Manster / Project Exile teams: Lil' Manster
-
-Optiroc: SuperFamiconv
-
-https://github.com/Miacidae/Lil-Manster-Public
-
-https://github.com/ZaneAvernathy/FE5-GBABattleForecast
-
-64tass
+- Zane Avernathy: GBA forecast, VoltEdge, FE5 disassembly
+- Miacis, Ultimage and the Lil' Manster / Project Exile teams: Lil' Manster
+- Optiroc: SuperFamiconv
+- 64tass
+- https://github.com/Miacidae/Lil-Manster-Public
+- https://github.com/ZaneAvernathy/FE5-GBABattleForecast
 
 If you find bugs, let me know!

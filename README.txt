@@ -16,6 +16,10 @@ LilManster108_GBAForecast_Plus.ips
     Battle Forecast: GBA / Still / Classic
     Weapon Triangle: GBA / Thracia / Off
     Unit Level:      On / Off
+  Game Speed (Lil' Manster's row) gets a third choice:
+    Normal / Fast / Walk
+    Walk: units walk fast like Fast, but the "Player Phase" /
+    "Enemy Phase" banner still shows.
   Extras: floating x2/x4, weapon triangle arrows,
   effective weapon flash, level in the units window.
   Also: rings and skill manuals can be used in the
@@ -38,7 +42,7 @@ LilManster108_GBAForecast_Plus.ips
                  (the button still says "Use", it just discards)
     No Penalty - items can be used, no turn penalty and the
                  unit can be taken out again
-  Patched ROM: CRC32 524F2312
+  Patched ROM: CRC32 6008C38D
 
 Existing saves work with both.
 

@@ -25,7 +25,7 @@ GUARD_LM_OPTIONS_MENU :?= false
   GUARD_LM_OPTIONS_MENU := true
 
   LMOptionRows          = 16
-  LMOldOptionPointers   = [$CEEC, $CF08, $CF24, $CF40, $CF58, $CF74, $CF8C, $CFAC, $CFC8, $CFE0, $CFF8, $D018]
+  LMOldOptionPointers   = [$CEEC, $CF08, $CF24, $CF40, $CF58, <>aLMOptionGameSpeed, $CF8C, $CFAC, $CFC8, $CFE0, $CFF8, $D018]
 
   ; Getter/saver helpers and every pointer in an option entry are
   ; 16-bit pointers into bank $11, so all of this lives there, in
@@ -61,6 +61,23 @@ GUARD_LM_OPTIONS_MENU :?= false
     aLMOptionForecast .LMOptionEntry aLMOptionNameForecast, aLMOptionChoicesForecast, aLMOptionSubForecast, $38A0, aLMOptionChoicesForecastPositions
     aLMOptionArrows   .LMOptionEntry aLMOptionNameArrows, aLMOptionChoicesArrows, aLMOptionSubArrows, $38A0, aLMOptionChoicesArrowsPositions
     aLMOptionLevel    .LMOptionEntry aLMOptionNameLevel, aLMOptionChoicesLevel, aLMOptionSubLevel, $38A4, aLMOptionChoicesLevelPositions
+    ; Lil' Manster's Game Speed row with a third choice, "Walk":
+    ; fast walking like Fast, but the phase banner still shows.
+    ; Same name, getter, saver and icon as Lil' Manster's entry.
+
+    aLMOptionGameSpeed
+      .word $0000
+      .word $D1A0
+      .word <>aLMOptionChoicesSpeed
+      .word <>aLMOptionSubSpeed
+      .word $D381
+      .word $D3B0
+      .word $38AA
+      .word len(aLMOptionChoicesSpeedPositions)
+      .for _Position, _Width in aLMOptionChoicesSpeedPositions
+        .word _Position, _Width
+      .endfor
+
     aLMOptionPrep     .LMOptionEntry aLMOptionNamePrep, aLMOptionChoicesPrep, aLMOptionSubPrep, $38A0, aLMOptionChoicesPrepPositions
 
     ; Getter: the menu calls this once per row when it opens.
@@ -251,6 +268,12 @@ GUARD_LM_OPTIONS_MENU :?= false
 
   ; "Restore" (Y) redraws all rows from row 0 down: DMA three
   ; more rows' worth of tilemap ($0840 -> $0B40).
+
+  ; Phase banner: Lil' Manster skips it when the speed nybble
+  ; is non-zero; skip it only for Fast (1), not for Walk (2).
+
+  * := $48DF5E
+  .word $0010
 
   * := $02E2D8
   .word $0840 + (4 * $C0)

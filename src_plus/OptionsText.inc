@@ -43,3 +43,11 @@ aLMOptionChoicesPrep ; On / Off / No Penalty, [(0, 1), (3, 2), (7, 6)], 13 tiles
   .word $0141, $2020, $2020, $0142, $0034, $2020, $2020, $001A, $0054, $011A, $0090, $00EC, $0072, 0
 
 aLMOptionChoicesPrepPositions := [(0, 1), (3, 2), (7, 6)]
+
+aLMOptionSubSpeed ; "Units move faster, Fast also hides the phase banner"
+  .word $0116, $0051, $001F, $0007, $0037, $0005, $01C9, $0002, $003C, $01CF, $0038, $0002, $015E, $003E, $0054, $0087, $0148, $001F, $005A, $0005, $00C4, $001E, $0005, $008A, $004E, $003C, 0
+
+aLMOptionChoicesSpeed ; Normal / Fast / Walk
+  .word $001A, $0008, $0007, $00EC, $2020, $2020, $0038, $0002, $2020, $2020, $0046, $00EC, $0032, 0
+
+aLMOptionChoicesSpeedPositions := [(0, 4), (6, 2), (10, 3)]

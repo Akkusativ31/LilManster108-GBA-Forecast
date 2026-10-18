@@ -27,6 +27,9 @@ All the credit should go to ZaneAvernathy and Miacidae. If Zane or Miacidae does
   - Classic is the normal Lil' Manster forecast
 - **Weapon Triangle**: GBA arrows / Thracia arrows / Off
 - **Unit Level**: shows the level in the units window (On / Off)
+- **Game Speed** (Lil' Manster's own option) gets a third choice: Normal / Fast / Walk
+  - Fast: units walk fast and the "Player Phase" / "Enemy Phase" banner is skipped
+  - Walk: units walk fast but the banner still shows
 
 <img width="1881" height="1440" alt="image" src="https://github.com/user-attachments/assets/3dd35d05-07db-4ef4-91bd-dd51def38b7e" />
 

@@ -50,7 +50,10 @@ GUARD_LM_PREP_ITEM_USE :?= false
   LMPrepLockSearch = $7F5000 ; scratch for the lock search
   LMPrepPromoCount = $7F5028 ; units waiting to promote on turn 1
   LMPrepPromos     = $7F502A ; their deployment numbers (bytes)
-  LMPrepUsedOffset = $3D     ; PlayerProperties: bits 0-4 unused
+  LMPrepUsedOffset = $3D     ; PlayerProperties bits 0-1. Not really free:
+                             ; the enemy AI fills bits 0-4 with item flags
+                             ; (has a staff etc., $8DB548) every enemy phase,
+                             ; so they're cleared when a chapter ends.
   LMPrepUsedMask   = $03     ; bits 0-1: items used (max 3) = turns without attacking
   LMPrepPenalty    = $7F5040  ; per unit index (48): turns, copied at turn 1
   LMPrepPenaltyTag = $7F5070  ; $4C00 | chapter the table belongs to
@@ -168,6 +171,15 @@ GUARD_LM_PREP_ITEM_USE :?= false
   * := $02FD43
   .logical mapped($02FD43)
     jml rlLMPrepDeployCheck
+    nop
+    nop
+  .endlogical
+
+  ; Next chapter ($83FB11): inc $0E11 / stz $0E13
+
+  * := $01FB23
+  .logical mapped($01FB23)
+    jsl rlLMNextChapterHook
     nop
     nop
   .endlogical
@@ -1612,6 +1624,43 @@ GUARD_LM_PREP_ITEM_USE :?= false
 
       _Done
       rts
+
+      .databank 0
+
+    rlLMNextChapterHook
+
+      .al
+      .autsiz
+      .databank $7E
+
+      ; A chapter was cleared: the original inc $0E11 / stz $0E13,
+      ; then clear bits 0-1 of $3D on all player units. The enemy
+      ; AI's item flags from the last enemy phase would otherwise
+      ; count as prep items on the next chapter's turn 1.
+
+      inc $7E0E11
+      stz $7E0E13
+
+      php
+      rep #$30
+      phx
+
+      ldx #0
+
+      -
+        lda @l $7E5298 + LMPrepUsedOffset,x
+        and #~LMPrepUsedMask & $FFFF
+        sta @l $7E5298 + LMPrepUsedOffset,x
+        txa
+        clc
+        adc #$41
+        tax
+        cpx #48 * $41
+        blt -
+
+      plx
+      plp
+      rtl
 
       .databank 0
 

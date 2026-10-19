@@ -44,6 +44,19 @@ Open:
    Tested: menu row fits and saves 0-3; enemy phase vs generic = map battle;
    enemy phase vs named = animated; player phase = animated; On/Off unchanged.
    `$00D7 = $DC33` while an animated battle runs (handy for checks).
+Fixed (dev): **Prep Use penalty on staff/magic users who used nothing.**
+   The "used items" count lives in bits 0-1 of $3D, but the enemy AI fills
+   bits 0-4 with item flags every enemy phase ($8DB548: bit 1 = has a staff,
+   bit 0 = item trait $08, bits 2-4 = certain staves). Flags left from the
+   last enemy phase of a chapter were read as prep items on the next
+   turn 1 (and locked those units in Deploy). Now bits 0-1 are cleared in
+   the next-chapter routine ($83FB23 hook). Saves made at a chapter start
+   with an older build still carry the stale flags (use Prep Use: No
+   Penalty for that chapter).
+   Debug tip: a snes9x libretro core built from source with a write
+   watch in getset.h (S9xSetByte/S9xSetWord) found this quickly; the
+   distro core (1.61) can't load current RetroArch states.
+
 2. **Faster map battles** (animations off): not started. A normal map battle
    has long idle stretches with the battle box shown. The map battle proc is
    "OA" at $84B0B0 (proc code at $84B0D3, uses $159C as a step counter);

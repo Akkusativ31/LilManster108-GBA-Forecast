@@ -3,7 +3,8 @@
 ; A fourth choice on the Animations row: battle animations play
 ; on the player phase, but battles on the enemy (and other)
 ; phases use the map battle instead. Battles against bosses and
-; other named enemies (ones with a portrait) still animate.
+; other named enemies (ones with their own portrait, not one of
+; the shared generic faces) still animate.
 ;
 ; The game checks the setting in two places (Lil' Manster's own
 ; code): both now go through rlLMAnimationSetting, which turns
@@ -18,7 +19,8 @@ GUARD_LM_ENEMY_PHASE_ANIMS :?= false
   LMActionStruct1    = $7EA4EF ; the two combatants
   LMActionStruct2    = $7EA560
   LMCharacterTable   = $869A2D ; character data, $30 bytes each, by ID - 1
-  LMCharacterPortrait = $2F    ; portrait byte, generics have none (>= $F9)
+  LMCharacterPortrait = $2F    ; portrait byte
+  LMFirstGenericPortrait = $91 ; $91 and up are shared generic faces
 
   ; lda $4E56 / and #$000F (6 bytes) -> jsl + 2 nops
 
@@ -100,7 +102,7 @@ GUARD_LM_ENEMY_PHASE_ANIMS :?= false
         pla
         lda @l LMCharacterTable + LMCharacterPortrait,x
         and #$00FF
-        cmp #$00F9
+        cmp #LMFirstGenericPortrait
         bge _No
 
           sec

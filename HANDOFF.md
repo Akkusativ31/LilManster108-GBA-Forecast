@@ -8,7 +8,7 @@ released state (v34). This `dev` branch adds unfinished work.
 1. Clone this repo, check out `dev`.
 2. The user attaches a Lil' Manster 1.08 ROM (CRC32 2039D71B). Put it in
    `src_plus/` as `LM108.sfc`. Never commit it.
-3. VoltEdge goes next to src_plus as `VoltEdge/`, at commit 357ae87:
+3. VoltEdge goes in the repo root (next to src_plus) as `VoltEdge/`, at commit 357ae87:
    `git clone https://github.com/ZaneAvernathy/VoltEdge && git -C VoltEdge checkout 357ae87`
 4. Build (64tass from the package manager):
    ```
@@ -35,14 +35,15 @@ into BG3 rows 0-3, see OptionsMenu.asm).
 
 Open:
 
-1. **Animations: Player** (`src_plus/EnemyPhaseAnims.asm`, written and it
-   builds, NOT tested). Fourth choice on the Animations row: no battle
-   animations on non-player phases, except when a non-player combatant has
-   a portrait (bosses, named enemies). Lil' Manster checks the setting at
-   $98ED7B and $11D687; both are hooked. To test: set $7E4E56 low nybble to
-   3, end turn so an enemy attacks (should be a map battle), and check a
-   fight against a named enemy (should animate). Check the menu row fits
-   (choices: On / Off / By Unit / Player).
+1. **Animations: Player** (`src_plus/EnemyPhaseAnims.asm`): done and tested
+   on the first map. Fourth choice on the Animations row: map battles on
+   non-player phases, except when a non-player combatant is a named
+   character. Hooks at $98ED7B and $11D687. "Named" = portrait byte ($2F in
+   the character table at $869A2D) below $91; $91 and up are shared generic
+   faces (generics all have portraits, so the old >= $F9 check was wrong).
+   Tested: menu row fits and saves 0-3; enemy phase vs generic = map battle;
+   enemy phase vs named = animated; player phase = animated; On/Off unchanged.
+   `$00D7 = $DC33` while an animated battle runs (handy for checks).
 2. **Faster map battles** (animations off): not started. A normal map battle
    has long idle stretches with the battle box shown. The map battle proc is
    "OA" at $84B0B0 (proc code at $84B0D3, uses $159C as a step counter);

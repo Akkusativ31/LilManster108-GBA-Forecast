@@ -25,7 +25,7 @@ GUARD_LM_OPTIONS_MENU :?= false
   GUARD_LM_OPTIONS_MENU := true
 
   LMOptionRows          = 16
-  LMOldOptionPointers   = [$CEEC, $CF08, $CF24, $CF40, $CF58, <>aLMOptionGameSpeed, $CF8C, $CFAC, $CFC8, $CFE0, $CFF8, $D018]
+  LMOldOptionPointers   = [<>aLMOptionAnimations, $CF08, $CF24, $CF40, $CF58, <>aLMOptionGameSpeed, $CF8C, $CFAC, $CFC8, $CFE0, $CFF8, $D018]
 
   ; Getter/saver helpers and every pointer in an option entry are
   ; 16-bit pointers into bank $11, so all of this lives there, in
@@ -65,6 +65,22 @@ GUARD_LM_OPTIONS_MENU :?= false
     ; Normal, Fast (fast walking) and Faster (fast walking and
     ; no phase banner, Lil' Manster's old Fast).
     ; Same name, getter, saver and icon as Lil' Manster's entry.
+
+    ; Lil' Manster's Animations row with a fourth choice, Player
+    ; (see EnemyPhaseAnims.asm). Same name, getter, saver and icon.
+
+    aLMOptionAnimations
+      .word $0000
+      .word $D03C
+      .word <>aLMOptionChoicesAnim
+      .word <>aLMOptionSubAnim
+      .word $D374
+      .word $D3A3
+      .word $38A0
+      .word len(aLMOptionChoicesAnimPositions)
+      .for _Position, _Width in aLMOptionChoicesAnimPositions
+        .word _Position, _Width
+      .endfor
 
     aLMOptionGameSpeed
       .word $0000

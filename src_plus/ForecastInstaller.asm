@@ -2511,6 +2511,10 @@ GUARD_GBA_FORECAST :?= false
 
     .include "PrepItemUse.asm"
 
+  ; Lil' Manster: Animations: Player (no generic enemy phase animations)
+
+    .include "EnemyPhaseAnims.asm"
+
   ; Standalone installer
 
     .if (USE_GBA_FORECAST_FREESPACE)

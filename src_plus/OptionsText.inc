@@ -51,3 +51,11 @@ aLMOptionChoicesSpeed ; Normal / Fast / Faster
   .word $001A, $0008, $0007, $00EC, $2020, $2020, $0038, $0002, $2020, $2020, $0038, $0002, $003C, 0
 
 aLMOptionChoicesSpeedPositions := [(0, 4), (6, 2), (10, 3)]
+
+aLMOptionSubAnim ; "Attack animations, Player skips them on enemy phase"
+  .word $0024, $0025, $0026, $015E, $0015, $0007, $0018, $004C, $004D, $01CF, $0127, $00BA, $003C, $01CB, $01D7, $0209, $01B1, $00D8, $013C, $007B, $01B2, $0088, $00F2, $01B5, $0077, $00B7, 0
+
+aLMOptionChoicesAnim ; On / Off / By Unit / Player
+  .word $0141, $2020, $2020, $0142, $0034, $2020, $2020, $0151, $0014, $0015, $0028, $2020, $0127, $00BA, $003C, 0
+
+aLMOptionChoicesAnimPositions := [(0, 1), (3, 2), (7, 4), (12, 3)]

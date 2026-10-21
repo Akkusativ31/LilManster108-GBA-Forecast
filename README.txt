@@ -22,6 +22,11 @@ LilManster108_GBAForecast_Plus.ips
             banner still shows
     Faster: units walk fast and the banner is skipped (this was
             Lil' Manster's Fast, so pick it again if you used Fast)
+  Animations (Lil' Manster's row) gets a fourth choice:
+    On / Off / By Unit / Player
+    Player: battle animations on your phase, map battles on
+            the enemy phase. Fights against bosses and other
+            named enemies still animate.
   Extras: floating x2/x4, weapon triangle arrows,
   effective weapon flash, level in the units window.
   Also: rings and skill manuals can be used in the
@@ -44,7 +49,7 @@ LilManster108_GBAForecast_Plus.ips
                  (the button still says "Use", it just discards)
     No Penalty - items can be used, no turn penalty and the
                  unit can be taken out again
-  Patched ROM: CRC32 2DAA6D3E
+  Patched ROM: CRC32 8B0A1287
 
 Existing saves work with both.
 

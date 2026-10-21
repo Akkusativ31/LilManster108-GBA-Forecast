@@ -30,6 +30,8 @@ All the credit should go to ZaneAvernathy and Miacidae. If Zane or Miacidae does
 - **Game Speed** (Lil' Manster's own option) gets a third choice: Normal / Fast / Faster
   - Fast: units walk fast, the "Player Phase" / "Enemy Phase" banner still shows
   - Faster: units walk fast and the banner is skipped (this was Lil' Manster's Fast, so pick it again if you used Fast)
+- **Animations** (Lil' Manster's own option) gets a fourth choice: On / Off / By Unit / Player
+  - Player: battle animations on your phase, map battles on the enemy phase. Fights against bosses and other named enemies still animate
 
 <img width="1881" height="1440" alt="image" src="https://github.com/user-attachments/assets/3dd35d05-07db-4ef4-91bd-dd51def38b7e" />
 
